@@ -1,0 +1,80 @@
+import java.io.*;
+import java.util.*;
+
+class Employee {
+    int id;
+    String name;
+    String designation;
+    double salary;
+
+    Employee(int id, String name, String designation, double salary) {
+        this.id = id;
+        this.name = name;
+        this.designation = designation;
+        this.salary = salary;
+    }
+
+    @Override
+    public String toString() {
+        return id + " | " + name + " | " + designation + " | " + salary;
+    }
+}
+
+public class EmployeeManagement {
+    static String filename = "employees.txt";
+
+    public static void addEmployee() {
+        Scanner sc = new Scanner(System.in);
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filename, true))) {
+            System.out.print("Enter Employee ID: ");
+            int id = sc.nextInt();
+            sc.nextLine();
+            System.out.print("Enter Name: ");
+            String name = sc.nextLine();
+            System.out.print("Enter Designation: ");
+            String designation = sc.nextLine();
+            System.out.print("Enter Salary: ");
+            double salary = sc.nextDouble();
+
+            Employee emp = new Employee(id, name, designation, salary);
+            bw.write(emp.toString());
+            bw.newLine();
+            System.out.println("Employee added successfully!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void displayEmployees() {
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            String line;
+            System.out.println("\n--- Employee Records ---");
+            while ((line = br.readLine()) != null) {
+                System.out.println(line);
+            }
+            System.out.println("------------------------");
+        } catch (IOException e) {
+            System.out.println("No employees found.");
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("\nEmployee Management System");
+            System.out.println("1. Add Employee");
+            System.out.println("2. Display All Employees");
+            System.out.println("3. Exit");
+            System.out.print("Enter choice: ");
+            int choice = sc.nextInt();
+
+            switch (choice) {
+                case 1: addEmployee(); break;
+                case 2: displayEmployees(); break;
+                case 3: System.out.println("Exiting..."); sc.close(); return;
+                default: System.out.println("Invalid choice!");
+            }
+        }
+    }
+}
